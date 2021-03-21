@@ -1,0 +1,9 @@
+NODE_ENV: development
+
+MONGO_IP: mongodb+srv://akash:vegeta47@cluster0.vydal.mongodb.net/test
+MONGO_DB: EWar
+
+RAPID_API_KEY: 43071bc3bemsh89ae341308f4d66p1b9020jsn6b3d1257b573
+CORONA_WORLDWIDE: https://corona-virus-world-and-india-data.p.rapidapi.com/api
+CORONA_INDIA_TIMELINE: https://corona-virus-world-and-india-data.p.rapidapi.com/api_india_timeline
+CORONA_INDIA: https://corona-virus-world-and-india-data.p.rapidapi.com/api_india

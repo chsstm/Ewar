@@ -1,0 +1,53 @@
+# serverless.yml
+
+service: ewar-architecture
+
+custom:
+  configFile: ${file(./config/${self:provider.stage}.yml)}
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    production: api.slay.co.in
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: 'ewar' # This will be prefixed to all routes
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+  prune:
+    automatic: true
+    number: 3
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'development'}
+  region: ap-south-1
+  memorySize: 1024
+  logRetentionInDays: 14
+
+  environment:
+    MONGO_IP: ${self:custom.configFile.MONGO_IP}
+    MONGO_DB: ${self:custom.configFile.MONGO_DB}
+    NODE_ENV: ${self:custom.configFile.NODE_ENV}
+    RAPID_API_KEY: ${self:custom.configFile.RAPID_API_KEY}
+    CORONA_WORLDWIDE: ${self:custom.configFile.CORONA_WORLDWIDE}
+    CORONA_INDIA_TIMELINE: ${self:custom.configFile.CORONA_INDIA_TIMELINE}
+    CORONA_INDIA: ${self:custom.configFile.CORONA_INDIA}
+
+package:
+  exclude:
+    - .git/**
+
+functions:
+  ewar:
+    handler: index.graphqlHandler
+    events:
+      - http:
+          path: /
+          method: any
+          cors: true
+
+plugins:
+  - serverless-domain-manager
+  - serverless-offline
+  - serverless-prune-plugin
